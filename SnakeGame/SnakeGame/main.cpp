@@ -36,8 +36,8 @@ void setUp() {
 	cout << " x : to exit the game";
 	cout << endl;
 	cout << "Please press ESC to start the Game";
-	if (_getch() == '\033') {
-		return;
+	while (_getch() != '\033') {
+
 	}
 }
 
@@ -83,7 +83,6 @@ void draw() {
 		cout << "#";
 	}
 	cout << endl;
-	Sleep(100);
 
 }
 
