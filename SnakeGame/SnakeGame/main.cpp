@@ -6,7 +6,7 @@ bool gameOver;
 const uint8_t height = 30;
 const uint8_t width = 30;
 uint8_t x, y;
-int score, fruitX, fruitY; // Since we will be using rand() we cant use uint8_t
+int score, fruitX, fruitY, tail, tailX[100], tailY[100]; // Since we will be using rand() we cant use uint8_t
 enum Direction {
 	LEFT, RIGHT, UP, DOWN, STOP
 };
@@ -63,7 +63,17 @@ void draw() {
 				cout << "F";
 			}
 			else {
-				cout << " ";
+				bool print = false;
+				for (int k = 0; k < tail; ++k) {
+					if (tailX[k] == i && tailY[k] == j) {
+						cout << "o";
+						print = true;
+					}
+				}
+				if (!print){
+					cout << " ";
+				}
+				
 			}
 		}
 		cout << endl;
@@ -78,7 +88,7 @@ void draw() {
 }
 
 void input() {
-	direction = STOP;
+		direction = STOP;
 		switch (_getch()) {
 
 		case 'w':   
@@ -105,6 +115,20 @@ void input() {
 }
 
 void logic() {
+	int prevX = tailX[0];
+	int prevY = tailY[0];
+	tailX[0] = x;
+	tailY[0] = y;
+	int tempX = 0, tempY = 0;
+	for (int i = 1; i < tail; ++i) {
+		tempX = tailX[i];
+		tempY = tailY[i];
+		tailX[i] = prevX;
+		tailY[i] = prevY;
+		prevX = tempX;
+		prevY = tempY;
+	}
+
 
 	switch (direction) {
 
@@ -129,6 +153,7 @@ void logic() {
 	}
 	if (x == fruitX && y == fruitY) {
 		score += 10;
+		++tail;
 		fruitX = rand() % height;
 		fruitY = rand() % width;
 	}
