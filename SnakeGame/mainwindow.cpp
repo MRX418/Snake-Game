@@ -32,6 +32,21 @@ void MainWindow::intro(){
        const QString str = QString::fromStdString(score);
        ui->textBrowser_2->setText("                                               Score : " + str);
        connect(this, SIGNAL(set()), &game_, SLOT(setUp()));
+       const QSize btnSize = QSize(100, 100);
+       for (int i = 0; i < game_.height_; ++i) {
+
+               for (int j = 0; j < game_.width_; ++j) {
+                   QPushButton* button = new QPushButton();
+
+                       button->setStyleSheet("background-color: black");
+                       button->setFixedSize(btnSize);
+
+
+                   ui->gridLayout->addWidget(button, i, j);
+                   ui->gridLayout->setSpacing(0);
+                   }
+
+               }
 }
 
 void set(){}
@@ -40,32 +55,12 @@ void MainWindow::start(){
     ui->start->deleteLater();
     emit set();
     draw();
-
-   // while (!game_.gameOver) {
-    //       draw();
-    //       logic();
-    //    }
 }
 
 void MainWindow::draw(){
     std::string score = std::to_string(game_.score_);
     const QString str = QString::fromStdString(score);
     ui->textBrowser_2->setText("                                               Score : " + str);
-    const QSize btnSize = QSize(100, 100);
-    for (int i = 0; i < game_.height_; ++i) {
-
-            for (int j = 0; j < game_.width_; ++j) {
-                QPushButton* button = new QPushButton();
-
-                    button->setStyleSheet("background-color: black");
-                    button->setFixedSize(btnSize);
-
-
-                ui->gridLayout->addWidget(button, i, j);
-                ui->gridLayout->setSpacing(0);
-                }
-
-            }
     for ( int i = 0; i < game_.height_; ++i ) {
 
         for ( int j = 0; j < game_.width_; ++j ) {
@@ -88,33 +83,31 @@ void MainWindow::draw(){
     }
 
 }
+
 void MainWindow::keyPressEvent(QKeyEvent *event){
+    game_.direction_ = game_.Direction::STOP;
     switch ( event->key() ) {
-    case Qt::Key_W:
+            case Qt::Key_W:
                 game_.direction_ = game_.Direction::UP;
-                 ui->textBrowser_2->setText("UP");
                 break;
             case Qt::Key_S:
                 game_.direction_ = game_.Direction::DOWN;
-                ui->textBrowser_2->setText("DOWN");
                 break;
             case Qt::Key_D:
                 game_.direction_ = game_.Direction::RIGHT;
-                ui->textBrowser_2->setText("RIGHT");
                 break;
             case Qt::Key_A:
                 game_.direction_ = game_.Direction::LEFT;
-                ui->textBrowser_2->setText("LEFT");
                 break;
             case Qt::Key_X:
                 game_.direction_ =game_.Direction::STOP;
-                ui->textBrowser_2->setText("STOP");
                 game_.gameOver = true;
                 break;
             default:
                 break;
 
     }
+    logic();
 }
 
 void MainWindow::logic() {
@@ -138,13 +131,13 @@ void MainWindow::logic() {
     case game_.Direction::UP:
         --game_.x_;
         break;
-    case game_.DOWN:
+    case game_.Direction::DOWN:
         ++game_.x_;
         break;
-    case game_.RIGHT:
+    case game_.Direction::RIGHT:
         ++game_.y_;
         break;
-    case game_.LEFT:
+    case game_.Direction::LEFT:
         --game_.y_;
         break;
     default:
@@ -160,6 +153,6 @@ void MainWindow::logic() {
         game_.fruitX_ = rand() % game_.height_;
         game_.fruitY_ = rand() % game_.width_;
     }
-
+    draw();
 }
 
