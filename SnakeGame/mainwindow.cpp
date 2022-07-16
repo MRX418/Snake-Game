@@ -54,7 +54,7 @@ void MainWindow::start(){
     ui->textBrowser->deleteLater();
     ui->start->deleteLater();
     emit set();
-    draw();
+    //draw();
 }
 
 void MainWindow::draw(){
@@ -65,22 +65,38 @@ void MainWindow::draw(){
 
         for ( int j = 0; j < game_.width_; ++j ) {
            auto button = qobject_cast<QPushButton*>(ui->gridLayout->itemAtPosition(i,j)->widget());
-           if (i == game_.x_ && j == game_.y_) {
-                button->setStyleSheet("background-color: red");
-            }
+           if (j == 0 || j ==  game_.width_ - 1) {
+                 button->setStyleSheet("background-color: black");
+                       }
+           //if (i == game_.x_ && j == game_.y_) {
+           //     button->setStyleSheet("background-color: red");
+           // }
             else if (i == game_.fruitX_ && j == game_.fruitY_) {
                 button->setStyleSheet("background-color: green");
             }
             else {
+               bool print = false;
                 for (int k = 0; k < game_.tail_; ++k) {
                     if (game_.tailX_[k] == i && game_.tailY_[k] == j) {
                         button->setStyleSheet("background-color: red");
+                        print = true;
                     }
                 }
+                if (!print){
+                     button->setStyleSheet("background-color: black");
+                    //for ( int from = 0; from < game_.height_; ++from ) {
+                      //  for ( int to = 0; to < game_.width_; ++to ) {
+                       //     if(from!=i && to!=j){
+                   //  qobject_cast<QPushButton*>(ui->gridLayout->itemAtPosition(from,to)->widget())->setStyleSheet("background-color: black");
+                    //        }
+                      //  }
+                    //}
+                    }
 
             }
         }
     }
+
 
 }
 
