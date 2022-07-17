@@ -15,17 +15,17 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow()override = default;;
-    void intro();
     void draw();
     void logic();
-   // void gameOver();
+    void gameOver();
 protected:
      void keyPressEvent(QKeyEvent *event) override;
 public slots:
+    void intro();
     void start();
 
 private:
     Ui::MainWindow *ui;
-    SnakeGame game_;
+   SnakeGame game_;
 };
 #endif // MAINWINDOW_H

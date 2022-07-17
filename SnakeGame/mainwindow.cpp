@@ -46,23 +46,26 @@ void MainWindow::intro(){
                    }
 
                }
-        //connect(this, SIGNAL(over()), this, SLOT(gameOver()));
 }
 
-//void MainWindow::gameOver(){
- //   for (int i = 0; i < game_.height_; ++i) {
+void MainWindow::gameOver(){
+  for (int i = 0; i < game_.height_; ++i) {
 
- //           for (int j = 0; j < game_.width_; ++j) {
- //               auto button = qobject_cast<QPushButton*>(ui->gridLayout->itemAtPosition(i,j)->widget());
-  //            button->setStyleSheet("background-color: black");
-  //          }
- //   }
- //   QTextBrowser* text = new QTextBrowser();
- //   text->setStyleSheet("background-color: black;");
- //   text->setTextColor(QColorConstants::Svg::green);
-  //  text->setText("GAME OVER");
-  //  ui->gridLayout->addWidget(text);
-//}
+            for (int j = 0; j < game_.width_; ++j) {
+              auto button = qobject_cast<QPushButton*>(ui->gridLayout->itemAtPosition(i,j)->widget());
+              button->deleteLater();
+            }
+   }
+   QLabel* text = new QLabel();
+    text->setStyleSheet("background-color: black;color : green; font-size: 100pt");
+   // text->set(QColorConstants::Svg::green);
+    text->setText("           GAME OVER");
+    //text->resize();
+    ui->gridLayout->addWidget(text);
+    ui->textBrowser_2->deleteLater();
+    ui->centralwidget->setStyleSheet("background-color: black;");
+}
+
 void MainWindow::start(){
     ui->textBrowser->deleteLater();
     ui->start->deleteLater();
@@ -126,7 +129,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             case Qt::Key_X:
                 game_.direction_ =game_.Direction::STOP;
                 game_.gameOver = true;
-                // this->gameOver();
+                this->gameOver();
                 break;
             default:
                 break;
@@ -169,9 +172,9 @@ void MainWindow::logic() {
         break;
 
     }
-    if (game_.x_ > game_.width_ || game_.x_ < 0 || game_.y_ < 0 || game_.y_ > game_.height_) {
+    if (game_.x_-2 > game_.width_ || game_.x_-2 < 0 || game_.y_+2 < 0 || game_.y_+2 > game_.height_) {
         game_.gameOver = true;
-       // this->gameOver();
+        this->gameOver();
     }
     if (game_.x_ == game_.fruitX_ && game_.y_ == game_.fruitY_) {
         game_.score_ += 10;
