@@ -17,10 +17,9 @@ public:
     const uint8_t height_ = 30;
     const uint8_t width_ = 30;
     uint8_t x_ , y_ ;
-    int score_ = 0 , fruitX_, fruitY_, tail_, tailX_[100], tailY_[100];
+    int score_ = 0 , fruitX_, fruitY_, tail_, tailX_[50], tailY_[50];
     Direction direction_;
-   public slots:
-        void setUp();
+    void setUp();
 };
 
 

@@ -8,6 +8,7 @@ void SnakeGame::setUp() {
     y_ = height_ / 2;
     fruitX_ = rand() %  height_;
     fruitY_ = rand() % width_;
+    tail_ = 0;
 }
 
 

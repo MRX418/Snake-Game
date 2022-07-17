@@ -18,8 +18,7 @@ public:
     void intro();
     void draw();
     void logic();
-signals:
-    void set();
+   // void gameOver();
 protected:
      void keyPressEvent(QKeyEvent *event) override;
 public slots:

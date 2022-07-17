@@ -6,7 +6,7 @@
 #include <iostream>
 #include <QLabel>
 #include <QKeyEvent>
-
+int count = 0;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -31,7 +31,6 @@ void MainWindow::intro(){
        std::string score = std::to_string(game_.score_);
        const QString str = QString::fromStdString(score);
        ui->textBrowser_2->setText("                                               Score : " + str);
-       connect(this, SIGNAL(set()), &game_, SLOT(setUp()));
        const QSize btnSize = QSize(100, 100);
        for (int i = 0; i < game_.height_; ++i) {
 
@@ -47,14 +46,28 @@ void MainWindow::intro(){
                    }
 
                }
+        //connect(this, SIGNAL(over()), this, SLOT(gameOver()));
 }
 
-void set(){}
+//void MainWindow::gameOver(){
+ //   for (int i = 0; i < game_.height_; ++i) {
+
+ //           for (int j = 0; j < game_.width_; ++j) {
+ //               auto button = qobject_cast<QPushButton*>(ui->gridLayout->itemAtPosition(i,j)->widget());
+  //            button->setStyleSheet("background-color: black");
+  //          }
+ //   }
+ //   QTextBrowser* text = new QTextBrowser();
+ //   text->setStyleSheet("background-color: black;");
+ //   text->setTextColor(QColorConstants::Svg::green);
+  //  text->setText("GAME OVER");
+  //  ui->gridLayout->addWidget(text);
+//}
 void MainWindow::start(){
     ui->textBrowser->deleteLater();
     ui->start->deleteLater();
-    emit set();
-    //draw();
+    game_.setUp();
+    draw();
 }
 
 void MainWindow::draw(){
@@ -68,39 +81,34 @@ void MainWindow::draw(){
            if (j == 0 || j ==  game_.width_ - 1) {
                  button->setStyleSheet("background-color: black");
                        }
-           //if (i == game_.x_ && j == game_.y_) {
-           //     button->setStyleSheet("background-color: red");
-           // }
+           if (i == game_.x_ && j == game_.y_) {
+                button->setStyleSheet("background-color: red");
+            }
             else if (i == game_.fruitX_ && j == game_.fruitY_) {
                 button->setStyleSheet("background-color: green");
             }
             else {
                bool print = false;
                 for (int k = 0; k < game_.tail_; ++k) {
-                    if (game_.tailX_[k] == i && game_.tailY_[k] == j) {
+                    if (game_.tailX_[k] == i && game_.tailY_[k] == j && count!=0) {
                         button->setStyleSheet("background-color: red");
                         print = true;
                     }
                 }
                 if (!print){
                      button->setStyleSheet("background-color: black");
-                    //for ( int from = 0; from < game_.height_; ++from ) {
-                      //  for ( int to = 0; to < game_.width_; ++to ) {
-                       //     if(from!=i && to!=j){
-                   //  qobject_cast<QPushButton*>(ui->gridLayout->itemAtPosition(from,to)->widget())->setStyleSheet("background-color: black");
-                    //        }
-                      //  }
-                    //}
+
                     }
 
             }
         }
     }
 
-
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event){
+    count++;
+    //draw();
     game_.direction_ = game_.Direction::STOP;
     switch ( event->key() ) {
             case Qt::Key_W:
@@ -118,6 +126,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event){
             case Qt::Key_X:
                 game_.direction_ =game_.Direction::STOP;
                 game_.gameOver = true;
+                // this->gameOver();
                 break;
             default:
                 break;
@@ -162,6 +171,7 @@ void MainWindow::logic() {
     }
     if (game_.x_ > game_.width_ || game_.x_ < 0 || game_.y_ < 0 || game_.y_ > game_.height_) {
         game_.gameOver = true;
+       // this->gameOver();
     }
     if (game_.x_ == game_.fruitX_ && game_.y_ == game_.fruitY_) {
         game_.score_ += 10;
